@@ -1,25 +1,126 @@
 <head>
-  <title>todo</title>
+  <title>todoList</title>
 </head>
 
 <body>
-  <h1>Welcome to Meteor!</h1>
+  <div class="container" style="padding-left:300px;padding-right: 300px">
 
-  {{> hello}}
-  {{> info}}
+    {{> header}}
+    {{> editTodo}}
+    {{> main}}
+   </div>
 </body>
 
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
+<template name="header">
+  <div class="row top">
+    <div class="col">
+      <h3 class= "title">Todo List (<i class="zmdi zmdi-notifications"></i>{{tasksFound}})</h3>
+    </div>
+
+    <div class="col-auto">
+      <div class="custom-control custom-checkbox">
+        <input class="custom-control-input" type="checkbox" value="" id="hide">
+        <label class="custom-control-label js-hcomptask" for="hide">Hide Completed Tasks</label>
+      </div>
+    </div>
+    
+    <div class="w-100"></div>
+
+    <div class="col-11 mb-3">
+      {{> loginButtons}}
+    </div>
+    
+    {{#if currentUser}}
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#editTodo">ADD</button>
+      </div>
+    {{/if}}
+  </div>
 </template>
 
-<template name="info">
-  <h2>Learn Meteor!</h2>
-  <ul>
-    <li><a href="https://www.meteor.com/try" target="_blank">Do the Tutorial</a></li>
-    <li><a href="http://guide.meteor.com" target="_blank">Follow the Guide</a></li>
-    <li><a href="https://docs.meteor.com" target="_blank">Read the Docs</a></li>
-    <li><a href="https://forums.meteor.com" target="_blank">Discussions</a></li>
-  </ul>
+<template name="main">
+  {{#each mainAll}}
+  {{#if PrivateOwner}}
+   <div class="row main" id="{{_id}}">
+      <div class="col-auto">      
+        <div class="custom-control custom-checkbox">
+          <input class="custom-control-input js-checked" type="checkbox" value="" checked={{Checked}} id="task{{_id}}">
+          <label class="custom-control-label" for="task{{_id}}">{{task}} (Private)</label>
+        </div>
+      </div>
+
+      <div class="col-auto">
+        <small class="text-muted">{{taskAge}}</small>
+        <small>Posted by <a href="#" id={{userId}} class="usrClick">{{userLoggedIn}}</a></small>
+      </div>
+
+      <div class="col-auto">
+        <i class="zmdi zmdi-delete js-delete"></i>
+      </div>
+    </div>
+  {{/if}}
+  {{#if PublicOwner}}
+   <div class="row main" id="{{_id}}">
+      <div class="col-auto">      
+        <div class="custom-control custom-checkbox">
+          <input class="custom-control-input js-checked" type="checkbox" checked={{Checked}} value="" id="task{{_id}}">
+          <label class="custom-control-label" for="task{{_id}}">{{task}}</label>
+        </div>
+      </div>
+
+      <div class="col-auto">
+        <small class="text-muted">{{taskAge}}</small>
+        <small>Posted by <a href="#" id={{userId}} class="usrClick">{{userLoggedIn}}</a></small>
+      </div>
+
+      <div class="col-auto">
+        {{#if currentUser}}
+          <i class="zmdi zmdi-delete js-delete"></i>
+        {{/if}}
+      </div>
+    </div>
+  {{/if}}
+  
+
+
+
+  
+  {{/each}}
+</template>
+
+<template name="editTodo">
+  <div class="modal fade" id="editTodo" tabindex="-1" role="dialog"  aria-labelledby="editTodoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editTodoTitle">Add Task</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1">Type new task</span>
+            </div>
+              <input type="text" id="editname" class="form-control" placeholder="...." aria-label="New Task" aria-describedby="basic-addon1">
+          </div>
+              <div class="col-auto"> 
+                <div class="custom-control custom-checkbox">
+                    <input class="custom-control-input one-only-priv" type="checkbox" value="" id="private">
+                    <label class="custom-control-label" for="private">Private</label>
+                </div>
+              </div>
+              <div class="col-auto"> 
+                <div class="custom-control custom-checkbox">
+                    <input class="custom-control-input one-only-pub" type="checkbox" value="" id="public">
+                    <label class="custom-control-label" for="public">Public</label>
+                </div>
+              </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary js-editSave">Save changes</button>
+            </div>
+      </div>
+    </div>
+  </div>
 </template>

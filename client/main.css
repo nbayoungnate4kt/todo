@@ -1,4 +1,5 @@
-body {
-  padding: 10px;
-  font-family: sans-serif;
+body{
+  background: url(coverpic.jpg);
+  background-repeat: no-repeat;
+  background-size: 100% ;
 }
